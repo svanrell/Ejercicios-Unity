@@ -4,7 +4,7 @@ Repositorio que contiene las entregas de los ejercicios prácticos de Unity (Eje
 
 ---
 
-## 📁 Estructura del Proyecto
+## Estructura del Proyecto
 
 - **`Ejercicio1/`**:
   - `ejerciciosUnity1.unitypackage`: Paquete con las escenas, scripts y materiales de los ejercicios 1.3, 1.4 y 1.5.
@@ -13,7 +13,7 @@ Repositorio que contiene las entregas de los ejercicios prácticos de Unity (Eje
 
 ---
 
-## 🎮 Ejercicio 1: Introducción, Físicas y Rotación
+## Ejercicio 1: Introducción, Físicas y Rotación
 
 Contenido del paquete `ejerciciosUnity1.unitypackage`:
 
@@ -29,7 +29,7 @@ Contenido del paquete `ejerciciosUnity1.unitypackage`:
 
 ---
 
-## 🎮 Ejercicio 2: Input, Movimiento con Inercia, Salto y Mecánicas
+## Ejercicio 2: Input, Movimiento con Inercia, Salto y Mecánicas
 
 ### 2.1. Métodos de Input en Unity
 
@@ -82,7 +82,7 @@ Contenido del paquete `Ejercicio2.unitypackage`:
 
 ---
 
-## 🚀 Cómo Importar los Paquetes en Unity
+## Cómo Importar los Paquetes en Unity
 
 1. Abre un proyecto en **Unity Editor** (compatible con versiones URP / 3D).
 2. En el menú superior, ve a:  
