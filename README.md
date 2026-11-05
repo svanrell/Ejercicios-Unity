@@ -1,6 +1,6 @@
 # Entrega de Ejercicios de Unity
 
-Repositorio que contiene las entregas de los ejercicios prácticos de Unity (Ejercicio 1 y Ejercicio 2), organizados en paquetes exportados (`.unitypackage`) listos para importar.
+Repositorio que contiene las entregas de los ejercicios prácticos de Unity (Ejercicio 1, Ejercicio 2 y Ejercicio 3), organizados en paquetes exportados (`.unitypackage`) listos para importar.
 
 ---
 
@@ -10,6 +10,8 @@ Repositorio que contiene las entregas de los ejercicios prácticos de Unity (Eje
   - `ejerciciosUnity1.unitypackage`: Paquete con las escenas, scripts y materiales de los ejercicios 1.3, 1.4 y 1.5.
 - **`Ejercicio2/`**:
   - `Ejercicio2.unitypackage`: Paquete con las escenas, scripts y recursos de los ejercicios 2.2, 2.3, 2.4 y 2.5.
+- **`Ejercicio3/`**:
+  - `Ejercicio3.unitypackage`: Paquete con las escenas, scripts, prefabs y materiales del núcleo del juego (Menú principal, Nivel 1, GameManager, monedas y KillZone).
 
 ---
 
@@ -82,11 +84,49 @@ Contenido del paquete `Ejercicio2.unitypackage`:
 
 ---
 
+## Ejercicio 3: Núcleo del Juego (Game Core, Escenas y UI)
+
+Contenido del paquete `Ejercicio3.unitypackage`:
+
+### 3.1. Escenas y Arquitectura
+
+- **Menú Principal (`Assets/Scenes/MenuPrincipal.unity`)**:
+  - Escena inicial configurada con Canvas, GraphicRaycaster y EventSystem.
+  - Botón interactivo "Play" vinculado al método `PlayGame()` de `MainMenu.cs` que carga el nivel mediante `SceneManager.LoadScene("Level1")`.
+- **Nivel 1 (`Assets/Scenes/Level1.unity`)**:
+  - Terreno de juego delimitado con un plano horizontal con tag `Ground` y 4 paredes invisibles perimetrales (`Wall_North`, `Wall_South`, `Wall_East`, `Wall_West`) como triggers sin renderizado.
+  - Zona de muerte `KillZone` situada bajo el plano con trigger para reiniciar la partida en caso de caída.
+  - Instanciación de monedas coleccionables (`Coin.prefab`) y jugador esférico con físicas.
+  - Objeto `GameManager` para la persistencia del estado de la partida.
+
+### 3.2. Scripts y Mecánicas
+
+- **Controlador del Jugador (`Assets/Scripts/PlayerController.cs`)**:
+  - Captura del input en `Update` mediante `Input.GetAxis("Horizontal")` y `Input.GetAxis("Vertical")`.
+  - Aplicación de velocidad física en `FixedUpdate` a través de `rb.linearVelocity`.
+  - Restricción de rotación en los ejes X y Z (`RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ`) para evitar vuelcos durante el desplazamiento.
+- **Gestor del Juego (`Assets/Scripts/GameManager.cs`)**:
+  - Implementación con patrón Singleton (`Instance`) accesible desde cualquier componente.
+  - Control de puntuación con contador (`score`), método de incremento `AddScore(int points)` y trazas de depuración por consola.
+  - Método `RestartLevel()` que recarga la escena activa (`SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex)`).
+- **Coleccionables y Animación (`Assets/Scripts/Coin.cs` y `Spinner.cs`)**:
+  - Prefab `Coin.prefab` con material dorado, `SphereCollider` configurado como trigger y orientación vertical.
+  - `Coin.cs`: Al colisionar con el tag `Player`, incrementa la puntuación llamando a `GameManager.Instance.AddScore(1)` y se destruye con `Destroy(gameObject)`.
+  - `Spinner.cs`: Aplica rotación continua en el eje Y en espacio mundial (`Space.World`) y una oscilación vertical continua arriba y abajo mediante `Mathf.PingPong(Time.time * floatSpeed, floatDistance)`.
+- **Zona de Muerte (`Assets/Scripts/KillZone.cs`)**:
+  - Trigger en el área inferior del escenario que detecta al `Player` y reinicia el nivel invocando `GameManager.Instance.RestartLevel()`.
+- **Menú Principal (`Assets/Scripts/MainMenu.cs`)**:
+  - Gestiona la transición inicial desde la interfaz de usuario al nivel de juego utilizando `SceneManager`.
+- **Herramienta de Configuración (`Assets/Editor/ProjectSetup.cs`)**:
+  - Script de Editor para automatizar la creación de directorios, materiales (`CoinMaterial`, `PlayerMaterial`, `GroundMaterial`), prefabs, configuración de escenas y actualización de los `Build Settings`.
+
+---
+
 ## Cómo Importar los Paquetes en Unity
 
 1. Abre un proyecto en **Unity Editor** (compatible con versiones URP / 3D).
 2. En el menú superior, ve a:  
    `Assets` > `Import Package` > `Custom Package...`
-3. Selecciona el archivo `.unitypackage` deseado (`Ejercicio1/ejerciciosUnity1.unitypackage` o `Ejercicio2/Ejercicio2.unitypackage`).
+3. Selecciona el archivo `.unitypackage` deseado (`Ejercicio1/ejerciciosUnity1.unitypackage`, `Ejercicio2/Ejercicio2.unitypackage` o `Ejercicio3/Ejercicio3.unitypackage`).
 4. En la ventana emergente, asegúrate de marcar todos los elementos y pulsa **Import**.
 5. Abre la escena correspondiente en la carpeta `Assets/Scenes/` y pulsa **Play**.
